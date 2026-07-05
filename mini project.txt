@@ -1,0 +1,126 @@
+import java.util.Scanner;
+
+public class ConnectFour {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        char[][] board = new char[6][7];
+        char[] players = {'X', 'O', 'A', 'B'};
+        String choice = "yes";
+
+        while (choice.equalsIgnoreCase("yes")) {
+
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+                    board[i][j] = '-';
+                }
+            }
+
+            int turn = 0;
+            boolean win = false;
+
+            while (!win) {
+
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 7; j++) {
+                        System.out.print(board[i][j] + " ");
+                    }
+                    System.out.println();
+                }
+
+                char player = players[turn % 4];
+
+                System.out.print("Player " + player + " enter column (1-7): ");
+                int col = sc.nextInt() - 1;
+
+                if (col < 0 || col > 6) {
+                    System.out.println("Invalid column");
+                    continue;
+                }
+
+                int row = -1;
+
+                for (int i = 5; i >= 0; i--) {
+                    if (board[i][col] == '-') {
+                        row = i;
+                        break;
+                    }
+                }
+
+                if (row == -1) {
+                    System.out.println("Column is full");
+                    continue;
+                }
+
+                board[row][col] = player;
+                turn++;
+
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 7; j++) {
+
+                        if (j + 3 < 7 &&
+                                board[i][j] == player &&
+                                board[i][j + 1] == player &&
+                                board[i][j + 2] == player &&
+                                board[i][j + 3] == player) {
+                            win = true;
+                        }
+
+                        if (i + 3 < 6 &&
+                                board[i][j] == player &&
+                                board[i + 1][j] == player &&
+                                board[i + 2][j] == player &&
+                                board[i + 3][j] == player) {
+                            win = true;
+                        }
+
+                        if (i + 3 < 6 && j + 3 < 7 &&
+                                board[i][j] == player &&
+                                board[i + 1][j + 1] == player &&
+                                board[i + 2][j + 2] == player &&
+                                board[i + 3][j + 3] == player) {
+                            win = true;
+                        }
+
+                        if (i - 3 >= 0 && j + 3 < 7 &&
+                                board[i][j] == player &&
+                                board[i - 1][j + 1] == player &&
+                                board[i - 2][j + 2] == player &&
+                                board[i - 3][j + 3] == player) {
+                            win = true;
+                        }
+                    }
+                }
+
+                if (win) {
+                    for (int i = 0; i < 6; i++) {
+                        for (int j = 0; j < 7; j++) {
+                            System.out.print(board[i][j] + " ");
+                        }
+                        System.out.println();
+                    }
+
+                    System.out.println("Player " + player + " Wins");
+                    break;
+                }
+
+                if (turn == 42) {
+                    for (int i = 0; i < 6; i++) {
+                        for (int j = 0; j < 7; j++) {
+                            System.out.print(board[i][j] + " ");
+                        }
+                        System.out.println();
+                    }
+
+                    System.out.println("Match Draw");
+                    break;
+                }
+            }
+
+            System.out.print("Play Again (yes/no): ");
+            choice = sc.next();
+        }
+
+        sc.close();
+    }
+}
